@@ -84,7 +84,7 @@ def prune_samples(samples):
     return new_samples
 
 
-def generator(samples, batch_size=32):
+def image_generator(samples, batch_size=32):
     num_samples = len(samples)
     while 1:    # Loop forever so the generator never terminates
         shuffle(samples)
@@ -97,7 +97,7 @@ def generator(samples, batch_size=32):
                 name = batch_sample.image
                 image = cv2.cvtColor(cv2.imread(name), cv2.COLOR_BGR2RGB)
                 if batch_sample.flip:
-                    # Horizontal flip
+                    # Vertical flip
                     image = cv2.flip(image, 1)
                 steering_angle = float(batch_sample.steering_angle)
                 images.append(image)
@@ -185,7 +185,6 @@ steering_samples = [x.steering_angle for x in all_samples]
 plt.interactive(False)
 plt.figure()
 plt.hist(steering_samples, bins=20)
-#plt.show(block=True)
 plt.title("Histogram of original data")
 plt.savefig("OrigDataHistogram.jpg")
 
@@ -193,14 +192,13 @@ pruned_samples = prune_samples(all_samples)
 steering_samples = [x.steering_angle for x in pruned_samples]
 plt.figure()
 plt.hist(steering_samples, bins=20)
-#plt.show(block=True)
 plt.title("Histogram of re-balanced data")
 plt.savefig("RebalancedDataHistogram.jpg")
 
 train_samples, validation_samples = train_test_split(pruned_samples, test_size=0.2)
 
-train_generator = generator(train_samples, batch_size=BATCH_SIZE)
-validation_generator = generator(validation_samples, batch_size=BATCH_SIZE)
+train_generator = image_generator(train_samples, batch_size=BATCH_SIZE)
+validation_generator = image_generator(validation_samples, batch_size=BATCH_SIZE)
 
 model = build_model()
 
@@ -217,7 +215,7 @@ history = model.fit_generator(
     callbacks=[checkpoint_callback],
     verbose=1)
 
-model.save('model-v17.h5')
+model.save('model-v16.h5')
 print(history.history.keys())
 print('Loss on the training set:')
 print(history.history['loss'])
