@@ -34,8 +34,8 @@ This project includes the following files:
 * model-v16.h5 containing a trained convolution neural network 
 * writeup_report.md summarizing the results
 * /videos contains all the videos that were recorded by drive.py and converted to MPEG-4 format by video.py
-* data.zip contains all the images and CSV files that were recorded for training purposes (will be unzipped to ./data)
 * /models contains all the trained models who didn't make it in the end
+* no training data is provided, since it is more than 1 Gb. This can be requested.
 
 #### 2. How to run the code
 Using the Udacity provided simulator and the drive.py file, the car can be driven autonomously around the track by executing 
