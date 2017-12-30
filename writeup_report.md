@@ -30,11 +30,11 @@ The goals / steps of this project are the following:
 
 This project includes the following files:
 * model.py containing the script to create and train the model 
-* drive.py for driving the car in autonomous mode
+* drive.py for driving the car in autonomous mode (slightly modified)
 * model-v16.h5 containing a trained convolution neural network 
 * writeup_report.md summarizing the results
 * /videos contains all the videos that were recorded by drive.py and converted to MPEG-4 format by video.py
-* /data contains all the images and CSV files that were recorded for training purposes
+* data.zip contains all the images and CSV files that were recorded for training purposes (will be unzipped to ./data)
 * /models contains all the trained models who didn't make it in the end
 
 #### 2. How to run the code
@@ -54,6 +54,7 @@ All the training/validation data is read and parsed by the *parse_log()* and *pa
 - *left2* and *right2*: I needed recordings where the network would learn to recover from situations where the car wasn't following the middle of the road anymore. It was suggested in the training material to make a recovery track, but I decided to follow a different strategy. I drove two tracks where I was trying to follow the left- and the rightmost parts of the road. I parsed the data of these track recordings and added an offset to the steering angle (+0.25 and -0.25), so that the network is guided towards the centre of the road again. That way, there is a recording for a recovery at almost each point in the track. First off, I tried an even more extreme strategy (recorded in *left* and *right*), where I would drive on the very edge of the road. This had the disadvantage that there was too little data of the space in between the centre and the edge of the road. This resulted in networks that were driving straight off to the edge of the road at some points and only recovering very late. These were the only recordings where the left and right camera images were not used.
   ![center_2017_12_24_15_54_18_522](/writeup-images/center_2017_12_24_15_54_18_522.jpg)
 - *turns*: An additional recording with only the sharper turns of the lake track to balance out all the recordings with steering angle close to 0.
+
   ![center_2017_12_24_00_41_21_697](/writeup-images/center_2017_12_24_00_41_21_697.jpg)
 - *mountains* and *mountains_reverse*: Since the mountain track contains a lot of sharper turns (and also parts where less of the road is visible when driving up a hill), the network was performing very poorly on this track. These recordings (one way and in reverse) would make the car drive a lot better on the mountain track, although it is a pity that by adding this data to the training data, we cannot cross check anymore on how well the network generalizes on other (unseen) tracks.
   ![center_2017_12_24_15_29_25_579](/writeup-images/center_2017_12_24_15_29_25_579.jpg)
@@ -149,7 +150,7 @@ It has to be noted that the loss for the training and validation set are close t
 
 The model was saved in **model-v16.h5**. This model was used for the video recordings where the network was driving the car autonomously. 
 
-**drive.py** was adapted due to the fact that the Windows simulator was using a different CUDA version. Since Keras uses the GPU version of Tensorflow (and this version uses an older CUDA version), this resulted in problems when getting the required cuBLAS and cuDNN handles. This was resolved by already performing a prediction with the trained network even before the simulator connects to the socket server **drive.py**. This way, the dynamic link library was directly loaded at start up of the Python script (and thus the right one was loaded). Another solution (commented out on lines 15-16) was provided to make Keras/Tensorflow run on CPU: this was also a valid solution, since the feed forward phase doesn't take that much CPU. 
+**drive.py** was adapted due to the fact that the Windows simulator was using a different CUDA version. Since Keras uses the GPU version of Tensorflow (and this version uses an older CUDA version), this resulted in problems when getting the required cuBLAS and cuDNN handles (the Windows simulator needs already to be running before the *telemetry()* function will be triggered and thus the first prediction will be made) . This was resolved by already performing a prediction with the trained network even before the simulator connects to the socket server **drive.py**. This way, the dynamic link library was directly loaded at start up of the Python script (and thus not the one already in memory is used). Another solution (commented out on lines 15-16) was provided to make Keras/Tensorflow run on CPU: this was also a valid solution, since the feed forward phase doesn't take that much CPU. 
 
 The first experiment was on the lake track, where we fixed the speed at 15 mph. The results can be found in **videos/lake-15mph.mp4**
 
@@ -157,7 +158,7 @@ The first experiment was on the lake track, where we fixed the speed at 15 mph. 
 
 The second experiment was on the same lake track, but now at the maximum speed of 30 mph. The results can be found in **videos/lake-30mph.mp4**
 
-The third experiment was on the mountain track, at 15 mph. 
+The third experiment was on the mountain track, at 15 mph. The results can be found in **videos/mountains-15mph.mp4**
 
 ![2017_12_27_21_42_02_691](/writeup-images/2017_12_27_21_42_02_691.jpg)
 
