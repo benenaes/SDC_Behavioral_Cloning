@@ -50,17 +50,17 @@ All the training data that was recorded, can be found in subfolders of the *data
 All the training/validation data is read and parsed by the *parse_log()* and *parse_all_data()* functions in **model.py** 
 
 - *middle* : This is a recording of three laps on the "lake" track using centre lane driving. I tried to keep the speed constant at around 15 mph (in all recordings) to avoid that speed/throttle/braking would play a role in the steering angle.  Also the images of the left and right cameras are used. An offset to the steering angle of +0.10 and -0.10 is applied respectively.
-  ![center_2017_12_21_22_27_38_011](.\data\middle\IMG\center_2017_12_21_22_27_38_011.jpg)
+  ![center_2017_12_21_22_27_38_011](.\writeup-images\center_2017_12_21_22_27_38_011.jpg)
 - *left2* and *right2*: I needed recordings where the network would learn to recover from situations where the car wasn't following the middle of the road anymore. It was suggested in the training material to make a recovery track, but I decided to follow a different strategy. I drove two tracks where I was trying to follow the left- and the rightmost parts of the road. I parsed the data of these track recordings and added an offset to the steering angle (+0.25 and -0.25), so that the network is guided towards the centre of the road again. That way, there is a recording for a recovery at almost each point in the track. First off, I tried an even more extreme strategy (recorded in *left* and *right*), where I would drive on the very edge of the road. This had the disadvantage that there was too little data of the space in between the centre and the edge of the road. This resulted in networks that were driving straight off to the edge of the road at some points and only recovering very late. These were the only recordings where the left and right camera images were not used.
-  ![center_2017_12_24_15_54_18_522](/data/left2/IMG/center_2017_12_24_15_54_18_522.jpg)
+  ![center_2017_12_24_15_54_18_522](/writeup-images/center_2017_12_24_15_54_18_522.jpg)
 - *turns*: An additional recording with only the sharper turns of the lake track to balance out all the recordings with steering angle close to 0.
-  ![center_2017_12_24_00_41_21_697](/data/turns/IMG/center_2017_12_24_00_41_21_697.jpg)
+  ![center_2017_12_24_00_41_21_697](/writeup-images/center_2017_12_24_00_41_21_697.jpg)
 - *mountains* and *mountains_reverse*: Since the mountain track contains a lot of sharper turns (and also parts where less of the road is visible when driving up a hill), the network was performing very poorly on this track. These recordings (one way and in reverse) would make the car drive a lot better on the mountain track, although it is a pity that by adding this data to the training data, we cannot cross check anymore on how well the network generalizes on other (unseen) tracks.
-  ![center_2017_12_24_15_29_25_579](/data/mountains/IMG/center_2017_12_24_15_29_25_579.jpg)
+  ![center_2017_12_24_15_29_25_579](/writeup-images/center_2017_12_24_15_29_25_579.jpg)
 - *mountains_turns*: It was already mentioned that there are a lot of sharper turns in the mountain track. This recording focussed on the really sharp turns in the track, so that we would have more of this type of data to train with.
-  ![center_2017_12_25_23_42_56_167](/data/mountains-turns/IMG/center_2017_12_25_23_42_56_167.jpg)
+  ![center_2017_12_25_23_42_56_167](/writeup-images/center_2017_12_25_23_42_56_167.jpg)
 - *mountains_turns2*: There is one particularly interesting part in the mountain track where there is a hairpin turn. I wanted this kind of data a bit better represented in the training data, so I added this one as well.
-  ![center_2017_12_26_22_21_46_223](/data/mountains-turns2/IMG/center_2017_12_26_22_21_46_223.jpg)
+  ![center_2017_12_26_22_21_46_223](/writeup-images/center_2017_12_26_22_21_46_223.jpg)
 
 ### Data Balancing
 
